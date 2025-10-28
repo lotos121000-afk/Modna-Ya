@@ -1,0 +1,469 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Каталог — Modna Я</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    /* --- Додаткові стилі тільки для каталогу --- */
+    .catalog-wrap{
+      display:grid; grid-template-columns:280px 1fr; gap:18px; margin:24px 0;
+    }
+    .filters{
+      background:#fff; border-radius:16px; box-shadow:var(--shadow); padding:16px; position:sticky; top:86px; align-self:start;
+    }
+    .filters h3{margin:0 0 10px; font-size:1.05rem}
+    .filter-group{margin-bottom:14px; border-top:1px solid #eee; padding-top:12px}
+    .filter-group:first-of-type{border-top:0; padding-top:0}
+    .filter-group label{display:block; margin:6px 0; color:#444}
+    .chips{display:flex; flex-wrap:wrap; gap:8px}
+    .chip{
+      padding:6px 10px; border-radius:12px; background:#f3f3f3; font-size:.92rem; cursor:pointer; user-select:none;
+    }
+    .chip.active{background:var(--brand-2); color:#222; border:1px solid #f0bac5}
+    .toolbar{
+      display:flex; gap:10px; align-items:center; justify-content:space-between; margin-bottom:12px;
+    }
+    .toolbar .left{display:flex; gap:10px; align-items:center}
+    .toolbar .right select{
+      padding:8px 10px; border-radius:10px; border:1px solid #ddd; background:#fff;
+    }
+    .results-hint{color:var(--muted); font-size:.95rem}
+
+    /* Кнопка ФІЛЬТРИ (мобільна) */
+    .filters-toggle{
+      display:none; background:#fff; border-radius:12px; box-shadow:var(--shadow);
+      padding:10px 14px; font-weight:700; border:0;
+    }
+
+    /* Мобільна панель фільтрів (drawer) */
+    .drawer{
+      position:fixed; inset:0; background:rgba(0,0,0,.4);
+      display:none; align-items:flex-end; z-index:90;
+    }
+    .drawer.show{display:flex}
+    .drawer-panel{
+      background:#fff; width:100%; max-height:82vh; border-radius:18px 18px 0 0; padding:16px; overflow:auto;
+      animation:slideUp .25s ease;
+    }
+    @keyframes slideUp{from{transform:translateY(20px);opacity:.7}to{transform:translateY(0);opacity:1}}
+    .drawer-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
+    .btn{display:inline-block; background:var(--brand); color:#fff; padding:10px 14px; border-radius:12px; font-weight:700; border:0; cursor:pointer}
+    .btn.secondary{background:#f0f0f0; color:#333}
+    .btn-group{display:flex; gap:10px}
+
+    /* Сітка товарів у каталозі (перекриває дефолт при потребі) */
+    .grid.catalog{grid-template-columns:repeat(3,1fr)}
+    .badge{font-size:.78rem}
+
+    /* Адаптив: на мобільних фільтри зверху */
+    @media (max-width: 1024px){
+      .catalog-wrap{grid-template-columns:1fr}
+      .filters{display:none}
+      .filters-toggle{display:inline-block}
+      .grid.catalog{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width: 480px){
+      .grid.catalog{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- ШАПКА -->
+  <header class="header">
+    <div class="container row">
+      <a class="logo" href="index.html">Modna Я</a>
+      <nav class="nav">
+        <a href="catalog.html">Каталог</a>
+        <a href="cart.html">Кошик</a>
+        <a href="order.html" class="cta">Оформити замовлення</a>
+        <a href="https://www.instagram.com/modnayashopp" target="_blank">Instagram</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Тулбар: кнопка фільтрів (моб), підказка, сортування -->
+    <div class="toolbar reveal">
+      <div class="left">
+        <button class="filters-toggle" id="openFilters">Фільтри</button>
+        <div class="results-hint"><span id="count">0</span> товар(ів) знайдено</div>
+      </div>
+      <div class="right">
+        <label for="sort" style="color:#666;margin-right:6px;">Сортування:</label>
+        <select id="sort">
+          <option value="popular">За популярністю</option>
+          <option value="new">За новизною</option>
+          <option value="price-asc">Ціна: зростання</option>
+          <option value="price-desc">Ціна: спадання</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="catalog-wrap">
+      <!-- Стаціонарні фільтри (десктоп) -->
+      <aside class="filters reveal" id="filtersDesktop">
+        <h3>Фільтри</h3>
+
+        <div class="filter-group">
+          <strong>Категорії</strong>
+          <label><input type="checkbox" name="category" value="Всі товари" checked> Всі товари</label>
+          <label><input type="checkbox" name="category" value="Верхній одяг"> Верхній одяг</label>
+          <label><input type="checkbox" name="category" value="Сукні та спідниці"> Сукні та спідниці</label>
+          <label><input type="checkbox" name="category" value="Костюми"> Костюми</label>
+          <label><input type="checkbox" name="category" value="Блузки та сорочки"> Блузки та сорочки</label>
+          <label><input type="checkbox" name="category" value="Джинси та брюки"> Джинси та брюки</label>
+          <label><input type="checkbox" name="category" value="Трикотаж"> Трикотаж</label>
+          <label><input type="checkbox" name="category" value="Топи, лонгсліви, футболки"> Топи / Лонгсліви / Футболки</label>
+          <label><input type="checkbox" name="category" value="Сумки та аксесуари"> Сумки та аксесуари</label>
+          <label><input type="checkbox" name="category" value="Білизна"> Білизна</label>
+        </div>
+
+        <div class="filter-group">
+          <strong>Колір</strong>
+          <div class="chips" id="colorChips">
+            <!-- чипси кольорів підставляємо з JS -->
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <strong>Розмір</strong>
+          <div class="chips" id="sizeChips"></div>
+        </div>
+
+        <div class="filter-group">
+          <strong>Статус</strong>
+          <div class="chips" id="statusChips"></div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn secondary" id="reset">Скинути</button>
+          <button class="btn" id="apply">Застосувати</button>
+        </div>
+      </aside>
+
+      <!-- Товари -->
+      <section>
+        <div class="grid catalog" id="grid"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ФУТЕР -->
+  <footer class="footer">
+    <div class="container row">
+      <small>© 2025 <b>Modna Я</b>. Усі права захищені.</small>
+      <small><a href="https://www.instagram.com/modnayashopp" target="_blank">@modnayashopp</a></small>
+    </div>
+  </footer>
+
+  <!-- Мобільний drawer фільтрів -->
+  <div class="drawer" id="drawer">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <h3 style="margin:0">Фільтри</h3>
+        <button class="btn secondary" id="closeDrawer">Закрити</button>
+      </div>
+
+      <!-- Ті самі групи, що й у десктопі (простий дубль для мобільного) -->
+      <div class="filter-group">
+        <strong>Категорії</strong>
+        <label><input type="checkbox" name="m-category" value="Всі товари" checked> Всі товари</label>
+        <label><input type="checkbox" name="m-category" value="Верхній одяг"> Верхній одяг</label>
+        <label><input type="checkbox" name="m-category" value="Сукні та спідниці"> Сукні та спідниці</label>
+        <label><input type="checkbox" name="m-category" value="Костюми"> Костюми</label>
+        <label><input type="checkbox" name="m-category" value="Блузки та сорочки"> Блузки та сорочки</label>
+        <label><input type="checkbox" name="m-category" value="Джинси та брюки"> Джинси та брюки</label>
+        <label><input type="checkbox" name="m-category" value="Трикотаж"> Трикотаж</label>
+        <label><input type="checkbox" name="m-category" value="Топи, лонгсліви, футболки"> Топи / Лонгсліви / Футболки</label>
+        <label><input type="checkbox" name="m-category" value="Сумки та аксесуари"> Сумки та аксесуари</label>
+        <label><input type="checkbox" name="m-category" value="Білизна"> Білизна</label>
+      </div>
+
+      <div class="filter-group">
+        <strong>Колір</strong>
+        <div class="chips" id="m-colorChips"></div>
+      </div>
+
+      <div class="filter-group">
+        <strong>Розмір</strong>
+        <div class="chips" id="m-sizeChips"></div>
+      </div>
+
+      <div class="filter-group">
+        <strong>Статус</strong>
+        <div class="chips" id="m-statusChips"></div>
+      </div>
+
+      <div class="btn-group" style="position:sticky; bottom:0; background:#fff; padding-top:8px">
+        <button class="btn secondary" id="m-reset">Скинути</button>
+        <button class="btn" id="m-apply">Застосувати</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Скрипти: завантаження, reveal анімації, фільтри/сортування -->
+  <script>
+    // плавна поява сторінки та reveal
+    window.addEventListener('load',()=>document.body.classList.add('ready'));
+    const obs=new IntersectionObserver((e)=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('show')}}),{threshold:.2});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+    // ===== Дані (демо-товари) =====
+    const PRODUCTS = [
+      {
+        id: 1,
+        title: "Сукня “Soft Beige”",
+        category: "Сукні та спідниці",
+        colors: ["бежевий"],
+        sizes: ["S","M","L"],
+        price: 1450,
+        status: "Хіт",
+        popular: 98,
+        createdAt: "2025-10-01",
+        img: "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1200&auto=format&fit=crop",
+      },
+      {
+        id: 2,
+        title: "Худі “Rose Cozy”",
+        category: "Трикотаж",
+        colors: ["рожевий"],
+        sizes: ["XS","S","M","L","XL"],
+        price: 990,
+        status: "Новинка",
+        popular: 85,
+        createdAt: "2025-10-22",
+        img: "https://images.unsplash.com/photo-1520975693419-93b9b3b6e62a?q=80&w=1200&auto=format&fit=crop",
+      },
+      {
+        id: 3,
+        title: "Джинси “Mom Fit”",
+        category: "Джинси та брюки",
+        colors: ["синій"],
+        sizes: ["25","26","27","28","29","30","31"],
+        price: 1200,
+        status: "В наявності",
+        popular: 100,
+        createdAt: "2025-09-14",
+        img: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop",
+      },
+      {
+        id: 4,
+        title: "Сумка “Minimal Nude”",
+        category: "Сумки та аксесуари",
+        colors: ["бежевий"],
+        sizes: ["OneSize"],
+        price: 890,
+        status: "В наявності",
+        popular: 72,
+        createdAt: "2025-08-30",
+        img: "https://images.unsplash.com/photo-1520975693412-44b6f90f1b75?q=80&w=1200&auto=format&fit=crop",
+      },
+      {
+        id: 5,
+        title: "Сорочка “White Air”",
+        category: "Блузки та сорочки",
+        colors: ["білий"],
+        sizes: ["XS","S","M","L","XL"],
+        price: 820,
+        status: "Новинка",
+        popular: 60,
+        createdAt: "2025-10-24",
+        img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?q=80&w=1200&auto=format&fit=crop",
+      },
+      {
+        id: 6,
+        title: "Куртка “Urban Black”",
+        category: "Верхній одяг",
+        colors: ["чорний"],
+        sizes: ["S","M","L","XL","2XL"],
+        price: 2150,
+        status: "Хіт",
+        popular: 95,
+        createdAt: "2025-09-30",
+        img: "https://images.unsplash.com/photo-1520974735194-3ab2b231a057?q=80&w=1200&auto=format&fit=crop",
+      },
+      {
+        id: 7,
+        title: "Топ “Pastel Pink”",
+        category: "Топи, лонгсліви, футболки",
+        colors: ["рожевий"],
+        sizes: ["XS","S","M"],
+        price: 540,
+        status: "В наявності",
+        popular: 58,
+        createdAt: "2025-07-15",
+        img: "https://images.unsplash.com/photo-1554568218-0f1715e72254?q=80&w=1200&auto=format&fit=crop",
+      },
+      {
+        id: 8,
+        title: "Костюм “Smart Gray”",
+        category: "Костюми",
+        colors: ["сірий"],
+        sizes: ["S","M","L","XL"],
+        price: 2790,
+        status: "Новинка",
+        popular: 77,
+        createdAt: "2025-10-19",
+        img: "https://images.unsplash.com/photo-1520971351122-22dfa3bcec3d?q=80&w=1200&auto=format&fit=crop",
+      }
+    ];
+
+    // ===== Довідники для фільтрів =====
+    const COLORS = ["бордовий","чорний","білий","рожевий","жовтий","шоколадний","синій","сірий","голубий","бежевий"];
+    const SIZES  = ["XS","S","M","L","XL","2XL","3XL","OneSize","25","26","27","28","29","30","31"]; // включив джинсові
+    const STATUSES = ["Хіт","Новинка","В наявності"];
+
+    // Рендер чипсів
+    function renderChips(containerId, values){
+      const el = document.getElementById(containerId);
+      el.innerHTML = values.map(v => `<span class="chip" data-val="${v}">${v}</span>`).join("");
+    }
+    renderChips("colorChips", COLORS);
+    renderChips("sizeChips", SIZES);
+    renderChips("statusChips", STATUSES);
+    renderChips("m-colorChips", COLORS);
+    renderChips("m-sizeChips", SIZES);
+    renderChips("m-statusChips", STATUSES);
+
+    // Вибір чипів (toggle)
+    function chipToggleHandler(e){
+      const t = e.target.closest('.chip'); if(!t) return;
+      t.classList.toggle('active');
+    }
+    ["colorChips","sizeChips","statusChips","m-colorChips","m-sizeChips","m-statusChips"].forEach(id=>{
+      document.getElementById(id).addEventListener('click', chipToggleHandler);
+    });
+
+    // Drawer (мобільні фільтри)
+    const drawer = document.getElementById('drawer');
+    document.getElementById('openFilters').addEventListener('click', ()=>drawer.classList.add('show'));
+    document.getElementById('closeDrawer').addEventListener('click', ()=>drawer.classList.remove('show'));
+    drawer.addEventListener('click', (e)=>{ if(e.target===drawer) drawer.classList.remove('show'); });
+
+    // Застосування / скидання фільтрів
+    document.getElementById('apply').addEventListener('click', applyFilters);
+    document.getElementById('reset').addEventListener('click', resetFilters);
+    document.getElementById('m-apply').addEventListener('click', ()=>{ applyFilters(); drawer.classList.remove('show'); });
+    document.getElementById('m-reset').addEventListener('click', resetAllMobile);
+
+    function getChecked(name){
+      return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(i=>i.value);
+    }
+    function getMobileChecked(name){
+      return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(i=>i.value);
+    }
+
+    function getActiveChips(containerId){
+      return [...document.querySelectorAll(`#${containerId} .chip.active`)].map(ch=>ch.dataset.val);
+    }
+
+    function resetFilters(){
+      document.querySelectorAll('input[name="category"]').forEach(i=>i.checked=false);
+      // за замовчуванням "Всі товари"
+      const all = [...document.querySelectorAll('input[name="category"]')].find(i=>i.value==="Всі товари");
+      if(all) all.checked = true;
+      document.querySelectorAll('#colorChips .chip.active, #sizeChips .chip.active, #statusChips .chip.active').forEach(c=>c.classList.remove('active'));
+      render(PRODUCTS);
+    }
+    function resetAllMobile(){
+      document.querySelectorAll('input[name="m-category"]').forEach(i=>i.checked=false);
+      const all = [...document.querySelectorAll('input[name="m-category"]')].find(i=>i.value==="Всі товари");
+      if(all) all.checked = true;
+      document.querySelectorAll('#m-colorChips .chip.active, #m-sizeChips .chip.active, #m-statusChips .chip.active').forEach(c=>c.classList.remove('active'));
+    }
+
+    // Сортування
+    document.getElementById('sort').addEventListener('change', ()=>applyFilters());
+
+    function applyFilters(){
+      // з десктопу
+      let selectedCats = getChecked('category');
+      let colors = getActiveChips('colorChips');
+      let sizes  = getActiveChips('sizeChips');
+      let statuses = getActiveChips('statusChips');
+
+      // якщо на десктопі фільтри не обрані — беремо з мобільних (коли на мобі)
+      if(window.innerWidth <= 1024){
+        const mCats = getMobileChecked('m-category');
+        if(mCats.length) selectedCats = mCats;
+        const mColors = getActiveChips('m-colorChips');
+        const mSizes  = getActiveChips('m-sizeChips');
+        const mStatuses = getActiveChips('m-statusChips');
+        if(mColors.length) colors = mColors;
+        if(mSizes.length) sizes = mSizes;
+        if(mStatuses.length) statuses = mStatuses;
+      }
+
+      let list = PRODUCTS.slice();
+
+      // Категорії
+      if(selectedCats.length && !selectedCats.includes("Всі товари")){
+        list = list.filter(p => selectedCats.includes(p.category));
+      }
+
+      // Колір
+      if(colors.length){
+        list = list.filter(p => p.colors.some(c => colors.includes(c)));
+      }
+
+      // Розмір
+      if(sizes.length){
+        list = list.filter(p => p.sizes.some(s => sizes.includes(s)));
+      }
+
+      // Статус
+      if(statuses.length){
+        list = list.filter(p => statuses.includes(p.status));
+      }
+
+      // Сортування
+      const sort = document.getElementById('sort').value;
+      if(sort === 'price-asc') list.sort((a,b)=>a.price-b.price);
+      if(sort === 'price-desc') list.sort((a,b)=>b.price-a.price);
+      if(sort === 'new') list.sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
+      if(sort === 'popular') list.sort((a,b)=> b.popular - a.popular);
+
+      render(list);
+    }
+
+    // Рендер товарів
+    function render(list){
+      const grid = document.getElementById('grid');
+      grid.innerHTML = list.map(p => `
+        <article class="card reveal">
+          <div style="position:relative">
+            <img src="${p.img}" alt="${p.title}">
+            ${p.status !== 'В наявності' ? `<span class="badge">${p.status}</span>`:``}
+          </div>
+          <div class="body">
+            <h3 class="title">${p.title}</h3>
+            <div class="meta">${p.category} • ${p.colors.join(', ')}</div>
+            <div class="price">${p.price.toLocaleString('uk-UA')} ₴</div>
+            <a class="buy" href="product.html" onclick="saveProduct(${p.id})">Переглянути</a>
+          </div>
+        </article>
+      `).join('');
+      document.getElementById('count').textContent = list.length;
+
+      // re-attach reveal for new nodes
+      document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+    }
+
+    // Збереження вибраного товару (щоб підхопити на product.html / order.html)
+    function saveProduct(id){
+      const p = PRODUCTS.find(x=>x.id===id);
+      if(p) localStorage.setItem('currentProduct', JSON.stringify(p));
+    }
+    window.saveProduct = saveProduct;
+
+    // Ініт: дефолт "Всі товари", порожні чипси => показуємо все
+    render(PRODUCTS);
+  </script>
+</body>
+</html>
+
+</html>

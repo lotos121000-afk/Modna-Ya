@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Кошик — Modna Я</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{opacity:0;transition:opacity .6s ease}
+    body.ready{opacity:1}
+
+    .cart-wrap{max-width:960px;margin:28px auto}
+    .empty{
+      background:#fff; border-radius:16px; box-shadow:var(--shadow);
+      padding:28px; text-align:center;
+    }
+    .cart-row{
+      display:grid; grid-template-columns:80px 1.4fr .9fr .9fr .6fr .8fr 40px;
+      align-items:center; gap:14px;
+      background:#fff; padding:12px; border-radius:12px; box-shadow:var(--shadow);
+    }
+    .cart-row + .cart-row{margin-top:10px}
+    .thumb{width:80px;height:100px;border-radius:10px;object-fit:cover}
+    .title{font-weight:700}
+    .muted{color:var(--muted); font-size:.95rem}
+
+    .qty{
+      display:flex; align-items:center; gap:8px; justify-content:flex-start;
+    }
+    .qty button{
+      width:28px;height:28px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;font-weight:800;
+    }
+    .qty input{
+      width:48px; text-align:center; border:1px solid #eee; border-radius:8px; padding:6px;
+    }
+
+    .price, .line-total{font-weight:800}
+    .actions a{
+      display:inline-block; background:var(--brand); color:#fff; padding:10px 12px; border-radius:10px; font-weight:700; text-decoration:none;
+    }
+    .remove{
+      background:#fff; border:1px solid #eee; border-radius:10px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    }
+
+    .summary{
+      background:#fff; border-radius:16px; box-shadow:var(--shadow);
+      padding:18px; margin-top:16px; display:flex; gap:14px; align-items:center; justify-content:space-between;
+    }
+    .sum-lines{font-size:16px}
+    .sum-lines b{color:var(--brand)}
+    .btns{display:flex; gap:10px; flex-wrap:wrap}
+    .btn{
+      display:inline-block; background:var(--brand); color:#fff; padding:12px 16px; border-radius:12px; font-weight:700; text-decoration:none;
+    }
+    .btn.secondary{background:#f0f0f0;color:#333}
+
+    @media(max-width:900px){
+      .cart-row{grid-template-columns:70px 1.3fr .8fr .9fr auto auto 36px}
+      .qty input{width:42px}
+    }
+    @media(max-width:680px){
+      .cart-row{grid-template-columns:70px 1fr auto; align-items:start}
+      .price,.line-total,.qty,.actions{margin-left:70px; grid-column:1/-1}
+      .remove{grid-column:3/4; justify-self:end}
+    }
+  </style>
+</head>
+<body>
+  <!-- ШАПКА -->
+  <header class="header">
+    <div class="container row">
+      <a class="logo" href="index.html">Modna Я</a>
+      <nav class="nav">
+        <a href="catalog.html">Каталог</a>
+        <a href="cart.html">Кошик</a>
+        <a href="order.html" class="cta">Оформити замовлення</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container cart-wrap">
+    <h1>Кошик</h1>
+    <div id="list"></div>
+
+    <div class="summary" id="summary" style="display:none">
+      <div class="sum-lines">
+        <div>Товарів: <b><span id="count">0</span></b></div>
+        <div>Сума: <b><span id="subtotal">0 ₴</span></b></div>
+      </div>
+      <div class="btns">
+        <a href="catalog.html" class="btn secondary">Продовжити покупки</a>
+        <a href="#" id="checkoutAll" class="btn">Оформити всі</a>
+      </div>
+    </div>
+
+    <div id="empty" class="empty" style="display:none">
+      Кошик порожній 😌<br>
+      <a class="btn" href="catalog.html" style="margin-top:12px;display:inline-block">До каталогу</a>
+    </div>
+  </main>
+
+  <!-- ФУТЕР -->
+  <footer class="footer">
+    <div class="container row">
+      <small>© 2025 <b>Modna Я</b>. Усі права захищені.</small>
+      <small><a href="https://www.instagram.com/modnayashopp" target="_blank">@modnayashopp</a></small>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('load',()=>document.body.classList.add('ready'));
+
+    const listEl = document.getElementById('list');
+    const emptyEl = document.getElementById('empty');
+    const summaryEl = document.getElementById('summary');
+    const countEl = document.getElementById('count');
+    const subtotalEl = document.getElementById('subtotal');
+
+    function getCart(){
+      return JSON.parse(localStorage.getItem('cart') || '[]');
+    }
+    function setCart(arr){
+      localStorage.setItem('cart', JSON.stringify(arr));
+    }
+
+    function format(n){ return n.toLocaleString('uk-UA') + ' ₴' }
+
+    function render(){
+      const cart = getCart();
+      listEl.innerHTML = '';
+      if(!cart.length){
+        emptyEl.style.display = 'block';
+        summaryEl.style.display = 'none';
+        return;
+      }
+      emptyEl.style.display = 'none';
+      summaryEl.style.display = 'flex';
+
+      let subtotal = 0;
+
+      cart.forEach((item, idx) => {
+        const qty = item.qty ? Number(item.qty) : 1;
+        const line = qty * item.price;
+        subtotal += line;
+
+        const row = document.createElement('div');
+        row.className = 'cart-row';
+        row.innerHTML = `
+          <img class="thumb" src="${item.img}" alt="">
+          <div>
+            <div class="title">${item.title}</div>
+            <div class="muted">${item.category || ''}${item.selectedSize ? ' • Розмір: '+item.selectedSize : ''}</div>
+          </div>
+          <div class="price">${format(item.price)}</div>
+          <div class="qty">
+            <button data-act="minus" aria-label="зменшити">−</button>
+            <input type="number" min="1" value="${qty}" />
+            <button data-act="plus" aria-label="збільшити">+</button>
+          </div>
+          <div class="line-total">${format(line)}</div>
+          <div class="actions">
+            <a href="#" data-act="buy">Купити зараз</a>
+          </div>
+          <button class="remove" title="Видалити" aria-label="Видалити" data-act="remove">✕</button>
+        `;
+
+        // обробники
+        const input = row.querySelector('input[type="number"]');
+        const minus = row.querySelector('button[data-act="minus"]');
+        const plus = row.querySelector('button[data-act="plus"]');
+        const remove = row.querySelector('button[data-act="remove"]');
+        const buy = row.querySelector('a[data-act="buy"]');
+        const lineTotalEl = row.querySelector('.line-total');
+
+        function updateQty(newQty){
+          const c = getCart();
+          c[idx].qty = Math.max(1, Number(newQty)||1);
+          setCart(c);
+          render();
+        }
+
+        minus.onclick = (e)=>{ e.preventDefault(); updateQty(qty-1); }
+        plus.onclick  = (e)=>{ e.preventDefault(); updateQty(qty+1); }
+        input.onchange = ()=> updateQty(input.value);
+
+        remove.onclick = (e)=>{
+          e.preventDefault();
+          const c = getCart();
+          c.splice(idx,1);
+          setCart(c);
+          render();
+        };
+
+        buy.onclick = (e)=>{
+          e.preventDefault();
+          const c = getCart()[idx];
+          // сформуємо одиночний товар для order.html
+          const orderProduct = {
+            ...c,
+            price: c.price * (c.qty ? Number(c.qty) : 1)
+          };
+          localStorage.setItem('orderProduct', JSON.stringify(orderProduct));
+          window.location.href = 'order.html';
+        };
+
+        listEl.appendChild(row);
+      });
+
+      countEl.textContent = cart.reduce((s,i)=> s + (i.qty?Number(i.qty):1), 0);
+      subtotalEl.textContent = format(subtotal);
+    }
+
+    // Оформити всі — зібрати в одне замовлення
+    document.getElementById('checkoutAll').onclick = (e)=>{
+      e.preventDefault();
+      const cart = getCart();
+      if(!cart.length) return;
+
+      const total = cart.reduce((s,i)=> s + (i.price * (i.qty?Number(i.qty):1)), 0);
+      const n = cart.reduce((s,i)=> s + (i.qty?Number(i.qty):1), 0);
+      const firstImg = cart[0]?.img || '';
+
+      const orderProduct = {
+        title: `Замовлення з кошика (${n} шт.)`,
+        selectedSize: '—',
+        price: total,
+        img: firstImg,
+        category: 'Кошик (змішано)'
+      };
+      localStorage.setItem('orderProduct', JSON.stringify(orderProduct));
+      window.location.href = 'order.html';
+    };
+
+    render();
+  </script>
+</body>
+</html>

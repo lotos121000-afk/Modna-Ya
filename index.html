@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modna Я — твій стиль кожного дня</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ШАПКА -->
+  <header class="header">
+    <div class="container row">
+      <a class="logo" href="index.html">Modna Я</a>
+      <nav class="nav">
+        <a href="catalog.html">Каталог</a>
+        <a href="cart.html">Кошик</a>
+        <a href="order.html" class="cta">Оформити замовлення</a>
+        <a href="https://www.instagram.com/modnayashopp" target="_blank">Instagram</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ГЕРО-БАНЕР -->
+    <section class="hero reveal">
+      <div class="hero-inner">
+        <div>
+          <h1>Modna Я — твій стиль кожного дня</h1>
+          <p>Новинки сезону Осінь/Зима. Великі фото, мінімалістичний стиль, ніжні рожево-бежеві акценти. Натисни — і переходь на сторінку товару.</p>
+          <a class="btn" href="catalog.html">Перейти в каталог</a>
+        </div>
+        <img class="hero-img" src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1600&auto=format&fit=crop" alt="Банер Modna Я">
+      </div>
+    </section>
+
+    <!-- ХІТИ ПРОДАЖУ -->
+    <section class="section reveal">
+      <h2>Хіти продажу</h2>
+      <div class="grid">
+        <!-- Товар 1 -->
+        <article class="card">
+          <div style="position:relative">
+            <img src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1200&auto=format&fit=crop" alt="Сукня">
+            <span class="badge">Хіт</span>
+          </div>
+          <div class="body">
+            <h3 class="title">Сукня “Soft Beige”</h3>
+            <div class="meta">S–L • бежевий</div>
+            <div class="price">1 450 ₴</div>
+            <a class="buy" href="product.html">Переглянути</a>
+          </div>
+        </article>
+        <!-- Товар 2 -->
+        <article class="card">
+          <div style="position:relative">
+            <img src="https://images.unsplash.com/photo-1520975693419-93b9b3b6e62a?q=80&w=1200&auto=format&fit=crop" alt="Худі">
+            <span class="badge">Новинка</span>
+          </div>
+          <div class="body">
+            <h3 class="title">Худі “Rose Cozy”</h3>
+            <div class="meta">XS–XL • рожевий</div>
+            <div class="price">990 ₴</div>
+            <a class="buy" href="product.html">Переглянути</a>
+          </div>
+        </article>
+        <!-- Товар 3 -->
+        <article class="card">
+          <div style="position:relative">
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200&auto=format&fit=crop" alt="Джинси">
+            <span class="badge">Бестселлер</span>
+          </div>
+          <div class="body">
+            <h3 class="title">Джинси “Mom Fit”</h3>
+            <div class="meta">25–31 • синій</div>
+            <div class="price">1 200 ₴</div>
+            <a class="buy" href="product.html">Переглянути</a>
+          </div>
+        </article>
+        <!-- Товар 4 -->
+        <article class="card">
+          <div style="position:relative">
+            <img src="https://images.unsplash.com/photo-1520975693412-44b6f90f1b75?q=80&w=1200&auto=format&fit=crop" alt="Сумка">
+          </div>
+          <div class="body">
+            <h3 class="title">Сумка “Minimal Nude”</h3>
+            <div class="meta">one size • беж</div>
+            <div class="price">890 ₴</div>
+            <a class="buy" href="product.html">Переглянути</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ПРОМО-БЛОКИ -->
+    <section class="section reveal">
+      <div class="promos">
+        <a class="promo" href="catalog.html">
+          <img src="https://images.unsplash.com/photo-1515378971421-7a3f28f2b683?q=80&w=1600&auto=format&fit=crop" alt="Outerwear">
+          <div class="content">
+            <h3>Верхній одяг</h3>
+            <p>Куртки, пальта, жилети — тепло & стиль</p>
+          </div>
+        </a>
+        <a class="promo" href="catalog.html">
+          <img src="https://images.unsplash.com/photo-1503342217505-b0a15cf70489?q=80&w=1600&auto=format&fit=crop" alt="Dresses">
+          <div class="content">
+            <h3>Сукні та спідниці</h3>
+            <p>Ніжність у кожному русі</p>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ФУТЕР -->
+  <footer class="footer">
+    <div class="container row">
+      <small>© 2025 <b>Modna Я</b>. Усі права захищені.</small>
+      <small><a href="https://www.instagram.com/modnayashopp" target="_blank">@modnayashopp</a></small>
+    </div>
+  </footer>
+
+  <!-- Анімація появи + reveal on scroll -->
+  <script>
+    // плавна поява сторінки
+    window.addEventListener('load',()=>document.body.classList.add('ready'));
+    // простий reveal
+    const obs=new IntersectionObserver((e)=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('show')}}),{threshold:.2});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  </script>
+</body>
+</html>

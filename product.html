@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Товар — Modna Я</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .product-wrap{
+      display:grid; grid-template-columns:1fr 1fr; gap:28px; margin:34px 0;
+    }
+    .product-img{
+      width:100%; border-radius:16px; box-shadow:var(--shadow);
+      aspect-ratio:3/4; object-fit:cover;
+      animation:fadeIn .6s both;
+    }
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(20px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    .product-info h1{margin:0 0 12px;font-size:1.8rem}
+    .meta{color:var(--muted); margin-bottom:14px}
+    .price{font-size:1.5rem; font-weight:800; color:var(--brand); margin:16px 0}
+    .size-label{font-weight:700;margin:14px 0 8px}
+    .sizes{display:flex; gap:10px; flex-wrap:wrap}
+    .size-option{
+      border:1px solid #ddd; padding:6px 12px; border-radius:12px;
+      cursor:pointer; user-select:none; background:#fff;
+    }
+    .size-option.active{
+      border-color:var(--brand);
+      background:var(--brand-2);
+      color:#000;
+    }
+    .btn2{
+      background:var(--brand);
+      color:#fff;
+      padding:14px 22px;
+      border-radius:12px;
+      font-weight:700;
+      text-decoration:none;
+      display:inline-block;
+      margin-top:16px;
+    }
+    .btn2:hover{filter:brightness(.95)}
+
+    @media(max-width:820px){
+      .product-wrap{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+<header class="header">
+  <div class="container row">
+    <a class="logo" href="index.html">Modna Я</a>
+    <nav class="nav">
+      <a href="catalog.html">Каталог</a>
+      <a href="cart.html">Кошик</a>
+      <a href="order.html" class="cta">Оформити замовлення</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <div class="product-wrap">
+    <img id="product-img" class="product-img" src="" alt="Product image">
+
+    <div class="product-info">
+      <h1 id="product-title"></h1>
+      <div class="meta" id="product-category"></div>
+      <div class="meta" id="product-colors"></div>
+
+      <div class="price" id="product-price"></div>
+
+      <div class="size-label">Оберіть розмір:</div>
+      <div class="sizes" id="sizes"></div>
+
+      <a class="btn2" href="#" id="addToCart">Додати у кошик 🛍️</a>
+      <br>
+      <a class="btn2" href="order.html" id="buyNow">Оформити зараз</a>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container row">
+    <small>© 2025 <b>Modna Я</b>. Усі права захищені.</small>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('load',()=>document.body.classList.add('ready'));
+
+  const product = JSON.parse(localStorage.getItem("currentProduct"));
+  if(!product){
+    document.querySelector('main').innerHTML = "<p>Товар не знайдено 😥</p>";
+  } else {
+    document.getElementById("product-img").src = product.img;
+    document.getElementById("product-title").textContent = product.title;
+    document.getElementById("product-category").textContent = product.category;
+    document.getElementById("product-colors").textContent = "Колір: " + product.colors.join(", ");
+    document.getElementById("product-price").textContent = product.price.toLocaleString('uk-UA') + " ₴";
+
+    // Розміри
+    const sizesEl = document.getElementById("sizes");
+    product.sizes.forEach(size=>{
+      const div = document.createElement("div");
+      div.className = "size-option";
+      div.textContent = size;
+      div.onclick = () =>{
+        document.querySelectorAll(".size-option").forEach(el=>el.classList.remove("active"));
+        div.classList.add("active");
+        localStorage.setItem("currentSize", size);
+      }
+      sizesEl.appendChild(div);
+    });
+  }
+
+  // Додавання у кошик
+  document.getElementById("addToCart").onclick = () =>{
+    const size = localStorage.getItem("currentSize");
+    if(!size){ alert("Оберіть розмір перед додаванням у кошик"); return; }
+
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    cart.push({...product, selectedSize:size});
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    alert("✅ Додано в кошик!");
+  };
+
+  // Купити зараз → зберігаємо товар для order.html
+  document.getElementById("buyNow").onclick = () =>{
+    const size = localStorage.getItem("currentSize");
+    if(!size){ alert("Оберіть розмір"); return false; }
+
+    localStorage.setItem("orderProduct", JSON.stringify({...product, selectedSize:size}));
+  };
+</script>
+
+</body>
+</html>
