@@ -1,63 +1,125 @@
-        
 <!DOCTYPE html>
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Каталог — Modna Я</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --pink:#fff7fa; --accent:#ef7f97; --ink:#2e2b30; }
-    * { box-sizing:border-box; }
-    body { margin:0; font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--pink); color:var(--ink); }
-    .wrap { max-width:1200px; margin:0 auto; padding:16px; }
-    .top { display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
-    .brand { font-weight:800; color:#ef7f97; }
-    .title { text-align:center; font-size:34px; font-weight:700; letter-spacing:.06em; margin:6px 0 14px; }
-    .tools { display:flex; justify-content:space-between; align-items:center; border-top:1px solid #eee; border-bottom:1px solid #eee; padding:10px 0; margin-bottom:18px; }
-    .chip { padding:10px 14px; border:1px solid #e9e9ee; border-radius:999px; background:#fff; }
-    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
-    @media (min-width:1024px){ .grid{ grid-template-columns:repeat(3,1fr);} }
-    .card { display:block; text-decoration:none; color:inherit; background:#fff; border:1px solid #f0f0f2; border-radius:18px; overflow:hidden; }
-    .pic { aspect-ratio:3/4; background:#f6f6f8; display:grid; place-items:center; }
-    .pic span { opacity:.4; font-size:14px; }
-    .info { padding:12px; }
-    .name { font-size:16px; line-height:1.25; min-height:40px; }
-    .price { font-weight:700; margin-top:6px; font-size:18px; }
+    :root{
+      --bg:#fff7fa; --card:#ffffff; --ink:#2e2b30; --muted:#8a8691;
+      --border:#eee9ef; --accent:#ef7f97; --shadow:0 6px 18px rgba(18,3,31,.06);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      font-family: Montserrat, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background:var(--bg); color:var(--ink);
+    }
+    .wrap{max-width:1200px;margin:0 auto;padding:16px}
+    /* top bar */
+    .top{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+    .top a{color:var(--ink);text-decoration:none}
+    .brand{font-weight:800;color:var(--accent)}
+    /* title */
+    .title{margin:10px 0 16px;text-align:center;font-size:36px;font-weight:800;letter-spacing:.06em}
+    /* chips */
+    .tools{display:flex;gap:14px;justify-content:space-between;align-items:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 0;margin-bottom:18px}
+    .chip{flex:1;text-align:center;padding:12px 16px;border:1px solid var(--border);border-radius:999px;background:#fff;box-shadow:var(--shadow)}
+    /* grid */
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    @media (min-width:1024px){ .grid{grid-template-columns:repeat(3,1fr)} }
+    /* card */
+    .card{display:block;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;text-decoration:none;color:inherit;transition:transform .12s ease}
+    .card:active{transform:translateY(1px)}
+    .media{position:relative;aspect-ratio:3/4;background:#f6f5f8}
+    .media img{width:100%;height:100%;object-fit:cover;display:block}
+    .fav{
+      position:absolute;right:10px;top:10px;width:38px;height:38px;border-radius:999px;
+      background:#fff;border:1px solid var(--border);display:grid;place-items:center;box-shadow:var(--shadow)
+    }
+    .fav svg{width:19px;height:19px;fill:none;stroke:#c3b9c8;stroke-width:2}
+    .fav.active svg{fill:#ff6d8b;stroke:#ff6d8b}
+    .info{padding:14px}
+    .name{font-size:16px;line-height:1.25;min-height:40px}
+    .price{margin-top:8px;font-weight:800;font-size:20px}
+    /* small helpers */
+    .muted{color:var(--muted)}
   </style>
 </head>
 <body>
   <div class="wrap">
+    <!-- top bar -->
     <div class="top">
-      <div>← <a href="index.html">Назад</a></div>
+      <a href="index.html">← Назад</a>
       <div class="brand">Modna Я</div>
-      <div><a href="cart.html">Кошик</a></div>
+      <a href="cart.html">Кошик</a>
     </div>
 
     <h1 class="title">NEW IN</h1>
 
+    <!-- chips -->
     <div class="tools">
       <div class="chip">Відкрити фільтри</div>
       <div class="chip">Сортування</div>
     </div>
 
-    <div class="grid">
+    <!-- grid -->
+    <div class="grid" id="grid">
+      <!-- item 1 -->
       <a class="card" href="product.html?id=1">
-        <div class="pic"><span>IMG 1 (img/1.jpg)</span></div>
+        <div class="media">
+          <img src="img/1.jpg" alt="Бомбер Паж слонова кістка з ефектом замші" loading="lazy">
+          <button class="fav" type="button" aria-label="Додати до обраного">
+            <svg viewBox="0 0 24 24"><path d="M12 21s-7.2-4.35-9.6-8.4C1.4 9.9 3 6.8 6.2 6.4c2-.25 3.6 1 3.8 1.2.2-.2 1.8-1.45 3.8-1.2 3.2.4 4.8 3.5 3.8 6.2C19.2 16.65 12 21 12 21z"/></svg>
+          </button>
+        </div>
         <div class="info">
           <div class="name">Бомбер Паж слонова кістка з ефектом замші</div>
           <div class="price">2700 ₴</div>
         </div>
       </a>
 
+      <!-- item 2 -->
       <a class="card" href="product.html?id=2">
-        <div class="pic"><span>IMG 2 (img/2.jpg)</span></div>
+        <div class="media">
+          <img src="img/2.jpg" alt="Бомбер Паж шоколадний з ефектом замші" loading="lazy">
+          <button class="fav" type="button" aria-label="Додати до обраного">
+            <svg viewBox="0 0 24 24"><path d="M12 21s-7.2-4.35-9.6-8.4C1.4 9.9 3 6.8 6.2 6.4c2-.25 3.6 1 3.8 1.2.2-.2 1.8-1.45 3.8-1.2 3.2.4 4.8 3.5 3.8 6.2C19.2 16.65 12 21 12 21z"/></svg>
+          </button>
+        </div>
         <div class="info">
           <div class="name">Бомбер Паж шоколадний з ефектом замші</div>
           <div class="price">2700 ₴</div>
         </div>
       </a>
+
+      <!-- приклад ще однієї картки -->
+      <a class="card" href="product.html?id=3">
+        <div class="media">
+          <img src="img/3.jpg" alt="Кардиган м'який трикотаж" loading="lazy">
+          <button class="fav" type="button" aria-label="Додати до обраного">
+            <svg viewBox="0 0 24 24"><path d="M12 21s-7.2-4.35-9.6-8.4C1.4 9.9 3 6.8 6.2 6.4c2-.25 3.6 1 3.8 1.2.2-.2 1.8-1.45 3.8-1.2 3.2.4 4.8 3.5 3.8 6.2C19.2 16.65 12 21 12 21z"/></svg>
+          </button>
+        </div>
+        <div class="info">
+          <div class="name">Кардиган м’який трикотаж</div>
+          <div class="price">1990 ₴</div>
+        </div>
+      </a>
     </div>
   </div>
+
+  <script>
+    // Сердечка (локально, без беку)
+    const favs = document.querySelectorAll('.fav');
+    favs.forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        e.preventDefault(); e.stopPropagation();
+        btn.classList.toggle('active');
+      });
+    });
+  </script>
 </body>
 </html>
