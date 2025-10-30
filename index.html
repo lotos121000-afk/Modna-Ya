@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Modna Я — Каталог</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     body {
       margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: #fff;
+      font-family: "Montserrat", sans-serif;
       color: #222;
+      background: #fff;
       overflow-x: hidden;
     }
 
     /* Верхня панель */
     .topbar {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 15px;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.75);
       backdrop-filter: blur(8px);
       z-index: 1000;
     }
@@ -56,19 +58,19 @@
       padding: 2px 6px;
     }
 
-    /* Фото-заставка */
+    /* Головний банер */
     .hero {
       height: 100vh;
-      background: url('model.jpg') center/cover no-repeat;
+      background: url("model.jpg") center center / cover no-repeat;
+      position: relative;
       display: flex;
       align-items: flex-end;
       justify-content: center;
       text-align: center;
-      position: relative;
     }
 
     .hero::after {
-      content: '';
+      content: "";
       position: absolute;
       inset: 0;
       background: rgba(0, 0, 0, 0.35);
@@ -93,22 +95,20 @@
       color: #fff;
     }
 
-    /* Випадаюче меню */
+    /* Меню */
     .menu-overlay {
       position: fixed;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: #fff;
       z-index: 2000;
-      transition: left 0.3s ease;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
       overflow-y: auto;
       padding: 20px;
     }
 
     .menu-overlay.active {
-      left: 0;
+      transform: translateX(0);
     }
 
     .menu-header {
@@ -129,7 +129,6 @@
       display: flex;
       align-items: center;
       margin: 12px 0;
-      cursor: pointer;
       text-decoration: none;
       color: #222;
     }
@@ -145,24 +144,30 @@
     .menu-item:hover {
       color: #e27386;
     }
+
+    body.menu-open {
+      height: 100vh;
+      overflow: hidden;
+    }
   </style>
 </head>
-<body>
 
+<body>
   <!-- Верхня панель -->
   <header class="topbar">
     <button class="icon-btn" id="burger" aria-label="Меню">
       <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="black" stroke-width="2">
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
       </svg>
     </button>
     <a href="index.html" class="logo">Modna Я</a>
-    <a href="cart.html" class="icon-btn" style="position: relative;">
+    <a href="cart.html" class="icon-btn" style="position: relative">
       <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="black" stroke-width="2">
-        <circle cx="10" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>
-        <path d="M2 2h2l3.6 7.59L5.25 14H19a1 1 0 0 0 .92-.62L23 4H6"/>
+        <circle cx="10" cy="20" r="1" />
+        <circle cx="18" cy="20" r="1" />
+        <path d="M2 2h2l3.6 7.59L5.25 14H19a1 1 0 0 0 .92-.62L23 4H6" />
       </svg>
       <span class="badge" id="cart-count">0</span>
     </a>
@@ -180,34 +185,41 @@
       <button class="icon-btn" id="close-menu">✕</button>
     </div>
     <ul class="menu-list">
-      <li><a href="catalog.html" class="menu-item"><img src="img/newin.jpg"><span>NEW IN</span></a></li>
-      <li><a href="catalog.html" class="menu-item"><img src="img/sale.jpg"><span>SALE</span></a></li>
-      <li><a href="catalog.html" class="menu-item"><img src="img/outerwear.jpg"><span>ВЕРХНІЙ ОДЯГ</span></a></li>
-      <li><a href="catalog.html" class="menu-item"><img src="img/dress.jpg"><span>СУКНІ</span></a></li>
-      <li><a href="catalog.html" class="menu-item"><img src="img/tshirt.jpg"><span>ФУТБОЛКИ</span></a></li>
-      <li><a href="catalog.html" class="menu-item"><img src="img/shirt.jpg"><span>СОРОЧКИ</span></a></li>
-      <li><a href="catalog.html" class="menu-item"><img src="img/suit.jpg"><span>КОСТЮМИ</span></a></li>
-      <li><a href="catalog.html" class="menu-item"><img src="img/knit.jpg"><span>ТРИКОТАЖ</span></a></li>
-      <li><a href="catalog.html" class="menu-item"><img src="img/skirt.jpg"><span>СПІДНИЦІ</span></a></li>
-      <li><a href="catalog.html" class="menu-item"><img src="img/pants.jpg"><span>БРЮКИ</span></a></li>
+      <li><a href="catalog.html" class="menu-item"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='24' fill='%23ffe9ef'/><text x='50%' y='54%' text-anchor='middle' font-size='9' font-family='Montserrat' fill='%23222'>NEW</text></svg>"><span>NEW IN</span></a></li>
+      <li><a href="catalog.html" class="menu-item"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='24' fill='%23ffd9df'/><text x='50%' y='54%' text-anchor='middle' font-size='10' font-family='Montserrat' fill='%23222'>SALE</text></svg>"><span>SALE</span></a></li>
+      <li><a href="catalog.html" class="menu-item"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='24' fill='%23f5e8ff'/><text x='50%' y='54%' text-anchor='middle' font-size='8' font-family='Montserrat' fill='%23222'>OUTER</text></svg>"><span>ВЕРХНІЙ ОДЯГ</span></a></li>
+      <li><a href="catalog.html" class="menu-item"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='24' fill='%23e9f8ff'/><text x='50%' y='54%' text-anchor='middle' font-size='10' font-family='Montserrat' fill='%23222'>DRESS</text></svg>"><span>СУКНІ</span></a></li>
+      <li><a href="catalog.html" class="menu-item"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='24' fill='%23eafff1'/><text x='50%' y='54%' text-anchor='middle' font-size='9' font-family='Montserrat' fill='%23222'>TEE</text></svg>"><span>ФУТБОЛКИ</span></a></li>
+      <li><a href="catalog.html" class="menu-item"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='24' fill='%23fff7e6'/><text x='50%' y='54%' text-anchor='middle' font-size='8' font-family='Montserrat' fill='%23222'>SHIRT</text></svg>"><span>СОРОЧКИ</span></a></li>
+      <li><a href="catalog.html" class="menu-item"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='24' fill='%23eaf0ff'/><text x='50%' y='54%' text-anchor='middle' font-size='8' font-family='Montserrat' fill='%23222'>SUIT</text></svg>"><span>КОСТЮМИ</span></a></li>
+      <li><a href="catalog.html" class="menu-item"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='24' fill='%23fff0f6'/><text x='50%' y='54%' text-anchor='middle' font-size='8' font-family='Montserrat' fill='%23222'>KNIT</text></svg>"><span>ТРИКОТАЖ</span></a></li>
+      <li><a href="catalog.html" class="menu-item"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='24' fill='%23eefdfd'/><text x='50%' y='54%' text-anchor='middle' font-size='8' font-family='Montserrat' fill='%23222'>SKIRT</text></svg>"><span>СПІДНИЦІ</span></a></li>
+      <li><a href="catalog.html" class="menu-item"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48'><circle cx='24' cy='24' r='24' fill='%23f2f2f2'/><text x='50%' y='54%' text-anchor='middle' font-size='8' font-family='Montserrat' fill='%23222'>PANTS</text></svg>"><span>БРЮКИ</span></a></li>
     </ul>
   </div>
 
   <script>
-    const burger = document.getElementById('burger');
-    const menu = document.getElementById('menu');
-    const closeBtn = document.getElementById('close-menu');
+    const burger = document.getElementById("burger");
+    const menu = document.getElementById("menu");
+    const closeBtn = document.getElementById("close-menu");
 
-    burger.addEventListener('click', () => menu.classList.add('active'));
-    closeBtn.addEventListener('click', () => menu.classList.remove('active'));
-    menu.addEventListener('click', e => {
-      if (e.target === menu) menu.classList.remove('active');
+    function openMenu() {
+      menu.classList.add("active");
+      document.body.classList.add("menu-open");
+    }
+    function closeMenu() {
+      menu.classList.remove("active");
+      document.body.classList.remove("menu-open");
+    }
+
+    burger.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+    menu.addEventListener("click", (e) => {
+      if (e.target === menu) closeMenu();
     });
 
-    // Лічильник кошика
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    document.getElementById('cart-count').textContent = cart.length;
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    document.getElementById("cart-count").textContent = cart.length;
   </script>
-
 </body>
 </html>
