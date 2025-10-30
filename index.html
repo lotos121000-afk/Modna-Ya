@@ -10,7 +10,39 @@
       --brand: #e27386;
     }
 
-    body {
+    body<!-- TOP BAR -->
+<header class="topbar">
+  <a href="catalog.html" class="icon-btn" aria-label="Відкрити каталог">
+    <!-- Бургер -->
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </a>
+
+  <a href="index.html" class="logo">Modna Я</a>
+
+  <div class="top-icons">
+    <a href="favorites.html" class="icon-btn" aria-label="Обране">
+      <!-- Сердечко -->
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20.8 4.6c-1.5-1.5-3.9-1.5-5.4 0l-.9.9-.9-.9c-1.5-1.5-3.9-1.5-5.4 0-1.5 1.5-1.5 3.9 0 5.4l6.3 6.3 6.3-6.3c1.4-1.4 1.4-3.9 0-5.4z"></path>
+      </svg>
+      <span id="fav-count" class="badge">0</span>
+    </a>
+
+    <a href="cart.html" class="icon-btn cart" aria-label="Кошик">
+      <!-- Сумка -->
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 7h12l-1 12H7L6 7z"></path>
+        <path d="M9 7a3 3 0 0 1 6 0"></path>
+      </svg>
+      <span id="cart-count" class="badge">0</span>
+    </a>
+  </div>
+</header>
+ {
       margin: 0;
       font-family: 'Montserrat', sans-serif;
       background: #fff7fa;
@@ -179,5 +211,6 @@
   </script>
 </body>
 </html>
+
 
 
