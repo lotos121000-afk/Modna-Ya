@@ -2,215 +2,164 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modna Я — твій стиль кожного дня</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modna Я — нова колекція</title>
+
+  <!-- Шрифт -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- (Необов'язково) твій глобальний файл стилів, якщо є -->
+  <link rel="stylesheet" href="styles.css" />
+
   <style>
-    :root {
-      --brand: #e27386;
+    :root{
+      --rose:#e27386;
+      --text:#222;
+      --glass: rgba(255,255,255,.6);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:#fff;
+      padding-top:56px; /* місце під фіксовану панель */
     }
 
-    body<!-- TOP BAR -->
-<header class="topbar">
-  <a href="catalog.html" class="icon-btn" aria-label="Відкрити каталог">
-    <!-- Бургер -->
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </a>
+    /* ===== TOP BAR ===== */
+    .topbar{
+      position:fixed; top:0; left:0; right:0; height:56px;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 14px;
+      background:var(--glass);
+      backdrop-filter: blur(8px);
+      z-index:1000;
+    }
+    .logo{
+      font-weight:700; font-size:18px; color:var(--rose); text-decoration:none;
+      letter-spacing:.2px;
+    }
+    .icon-btn{
+      position:relative; display:inline-flex; align-items:center; justify-content:center;
+      width:38px; height:38px; border-radius:10px; color:#333; text-decoration:none;
+      transition:background .2s ease, transform .1s ease;
+    }
+    .icon-btn:hover{ background: rgba(0,0,0,.06); }
+    .icon-btn:active{ transform: scale(.96); }
+    .top-icons{ display:flex; align-items:center; gap:12px; }
 
-  <a href="index.html" class="logo">Modna Я</a>
-
-  <div class="top-icons">
-    <a href="favorites.html" class="icon-btn" aria-label="Обране">
-      <!-- Сердечко -->
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M20.8 4.6c-1.5-1.5-3.9-1.5-5.4 0l-.9.9-.9-.9c-1.5-1.5-3.9-1.5-5.4 0-1.5 1.5-1.5 3.9 0 5.4l6.3 6.3 6.3-6.3c1.4-1.4 1.4-3.9 0-5.4z"></path>
-      </svg>
-      <span id="fav-count" class="badge">0</span>
-    </a>
-
-    <a href="cart.html" class="icon-btn cart" aria-label="Кошик">
-      <!-- Сумка -->
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M6 7h12l-1 12H7L6 7z"></path>
-        <path d="M9 7a3 3 0 0 1 6 0"></path>
-      </svg>
-      <span id="cart-count" class="badge">0</span>
-    </a>
-  </div>
-</header>
- {
-      margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: #fff7fa;
-      overflow-x: hidden;
+    .badge{
+      position:absolute; right:-6px; top:-6px;
+      min-width:18px; height:18px; padding:0 5px;
+      border-radius:10px; background:var(--rose); color:#fff;
+      font-size:12px; line-height:18px; font-weight:700; text-align:center;
     }
 
-    /* ===== Header ===== */
-    .header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10;
+    /* ===== HERO ===== */
+    .hero{
+      position:relative;
+      min-height:calc(100vh - 56px); /* повна висота екрану мінус топбар */
+      width:100%;
+      background:url('model.jpg') center/cover no-repeat fixed;
+      display:flex; align-items:flex-end; justify-content:flex-start;
+      overflow:hidden;
+    }
+    /* легкий затемнювач знизу для контрасту кнопки */
+    .hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(to top, rgba(0,0,0,.35) 0%, rgba(0,0,0,.15) 30%, rgba(0,0,0,0) 60%);
+      pointer-events:none;
+    }
+    .hero-inner{
+      position:relative; z-index:1;
+      width:100%;
+      padding:24px;
+      display:flex; justify-content:flex-start;
     }
 
-    .logo {
-      font-size: 24px;
-      font-weight: 700;
-      color: #fff;
-      text-decoration: none;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    .cta{
+      display:inline-block;
+      padding:12px 22px;
+      font-weight:700; text-decoration:none; letter-spacing:.3px;
+      border-radius:999px; background:#fff; color:#111;
+      box-shadow:0 6px 18px rgba(0,0,0,.15);
+      transition: transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+    }
+    .cta:hover{
+      transform: translateY(-1px);
+      box-shadow:0 10px 24px rgba(0,0,0,.20);
+      background:var(--rose); color:#fff;
     }
 
-    .nav a {
-      color: #fff;
-      text-decoration: none;
-      margin-left: 20px;
-      font-weight: 500;
-      transition: opacity 0.3s;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .nav a:hover {
-      opacity: 0.8;
-    }
-
-    /* ===== Hero ===== */
-    .hero {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: url('model.jpg') center/cover no-repeat;
-      transform: scale(1);
-      transition: transform 8s ease-out;
-      z-index: 1;
-    }
-
-    .hero:hover::before {
-      transform: scale(1.08);
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      z-index: 2;
-    }
-
-    .hero__content {
-      position: relative;
-      z-index: 3;
-      text-align: center;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #fff;
-      animation: fadeUp 1s ease forwards;
-    }
-
-    .hero__title {
-      font-size: clamp(36px, 6vw, 72px);
-      font-weight: 700;
-      margin-bottom: 10px;
-      opacity: 0;
-      animation: fadeUp 1s ease 0.2s forwards;
-    }
-
-    .hero__subtitle {
-      font-size: clamp(18px, 3vw, 26px);
-      margin-bottom: 30px;
-      opacity: 0;
-      animation: fadeUp 1s ease 0.4s forwards;
-    }
-
-    .hero__btn {
-      display: inline-block;
-      background: #fff;
-      color: #000;
-      padding: 14px 36px;
-      border-radius: 30px;
-      font-weight: 600;
-      text-decoration: none;
-      opacity: 0;
-      animation: fadeUp 1s ease 0.6s forwards;
-      transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
-    }
-
-    .hero__btn:hover {
-      background: var(--brand);
-      color: #fff;
-      transform: translateY(-4px);
-      box-shadow: 0 10px 25px rgba(226, 115, 134, 0.4);
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    footer {
-      background: #fff0f4;
-      padding: 20px;
-      text-align: center;
-      font-size: 14px;
-      color: #666;
+    /* Для дуже вузьких екранів — трохи менша кнопка */
+    @media (max-width:420px){
+      .cta{ padding:10px 18px; font-size:14px; }
     }
   </style>
 </head>
-
 <body>
 
-  <!-- Header -->
-  <header class="header">
-    <a class="logo" href="index.html">Modna Я</a>
-    <nav class="nav">
-      <a href="catalog.html">Каталог</a>
-      <a href="cart.html">Кошик</a>
-      <a href="order.html">Замовлення</a>
-      <a href="https://www.instagram.com/modnayashop" target="_blank" rel="noopener">Instagram</a>
-    </nav>
+  <!-- ===== TOP BAR ===== -->
+  <header class="topbar">
+    <!-- Бургер → каталог -->
+    <a href="catalog.html" class="icon-btn" aria-label="Відкрити каталог">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </a>
+
+    <!-- Лого -->
+    <a href="index.html" class="logo">Modna Я</a>
+
+    <!-- Обране + Кошик -->
+    <div class="top-icons">
+      <a href="favorites.html" class="icon-btn" aria-label="Обране">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.8 4.6c-1.5-1.5-3.9-1.5-5.4 0l-.9.9-.9-.9c-1.5-1.5-3.9-1.5-5.4 0-1.5 1.5-1.5 3.9 0 5.4l6.3 6.3 6.3-6.3c1.4-1.4 1.4-3.9 0-5.4z"></path>
+        </svg>
+        <span id="fav-count" class="badge">0</span>
+      </a>
+
+      <a href="cart.html" class="icon-btn" aria-label="Кошик">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 7h12l-1 12H7L6 7z"></path>
+          <path d="M9 7a3 3 0 0 1 6 0"></path>
+        </svg>
+        <span id="cart-count" class="badge">0</span>
+      </a>
+    </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero__content">
-      <h1 class="hero__title">Осінь / Зима 2025</h1>
-      <p class="hero__subtitle"></p>
-      <a href="catalog.html" class="hero__btn">Переглянути</a>
-    </div>
-  </section>
+  <!-- ===== HERO BLOCK ===== -->
+  <main>
+    <section class="hero">
+      <div class="hero-inner">
+        <a class="cta" href="catalog.html" aria-label="Переглянути каталог">переглянути</a>
+      </div>
+    </section>
+  </main>
 
-  <footer>© 2025 Modna Я — твій стиль кожного дня</footer>
-
+  <!-- ===== COUNTERS SCRIPT ===== -->
   <script>
-    // Паралакс ефект при русі миші
-    document.addEventListener('mousemove', e => {
-      const hero = document.querySelector('.hero::before');
-    });
+    function updateCounts(){
+      try{
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const favs = JSON.parse(localStorage.getItem('favorites') || '[]');
+        var cartEl = document.getElementById('cart-count');
+        var favEl  = document.getElementById('fav-count');
+
+        if(cartEl) cartEl.textContent = cart.length;
+        if(favEl)  favEl.textContent  = favs.length;
+      }catch(e){
+        // якщо щось не так з localStorage — тихо ігноруємо
+      }
+    }
+    document.addEventListener('DOMContentLoaded', updateCounts);
+    window.addEventListener('storage', updateCounts);
   </script>
 </body>
 </html>
-
-
-
