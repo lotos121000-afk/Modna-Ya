@@ -97,7 +97,16 @@
     <input type="text" name="user_name" required>
 
     <label>Телефон:</label>
-    <input type="tel" name="user_phone" required placeholder="+380…" pattern="\\+?3?8?(0\\d{9})">
+<input
+  type="tel"
+  name="phone"
+  inputmode="tel"
+  pattern="^(?:\+?380|0)\d{9}$"
+  title="Введіть телефон у форматі +380XXXXXXXXX або 0XXXXXXXXX"
+  placeholder="+380XXXXXXXXX"
+  required
+/>
+
 
     <label>Місто:</label>
     <input type="text" name="user_city" required>
@@ -221,4 +230,5 @@ document.getElementById("order-form").addEventListener("submit", function(e){
 
 </body>
 </html>
+
 
